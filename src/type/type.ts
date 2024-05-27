@@ -1,3 +1,5 @@
+import { JwtPayload } from "jwt-decode";
+
 export interface IPet {
     id: string;
     name: string;
@@ -14,3 +16,9 @@ export interface IPet {
     updatedAt: string; // Consider using Date type if you plan to work with date objects
   }
   
+
+  // types.ts
+export interface UserInfo extends JwtPayload {
+  name: string;
+  email: string;
+}

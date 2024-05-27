@@ -1,6 +1,7 @@
 "use client";
 import { AccountCircle } from "@mui/icons-material";
 import { IconButton, Menu, MenuItem } from "@mui/material";
+import Link from "next/link";
 import React from "react";
 
 const ProfileMenu = ({userInfo,handleLogOut}:{userInfo:any,handleLogOut:any}) => {
@@ -46,7 +47,8 @@ const ProfileMenu = ({userInfo,handleLogOut}:{userInfo:any,handleLogOut:any}) =>
         open={Boolean(anchorEl)}
         onClose={handleClose}
       >
-        <MenuItem onClick={handleClose}>Profile</MenuItem>
+        <MenuItem onClick={handleClose}><Link href="/profile">Profile</Link></MenuItem>
+        <MenuItem onClick={handleClose}><Link href="/my-adopted-pets"> My Adopted Pets</Link></MenuItem>
         <MenuItem onClick={handleLogOut}>Log Out</MenuItem>
       </Menu>
     </div>
