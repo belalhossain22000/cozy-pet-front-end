@@ -61,10 +61,6 @@ const Navbar = () => {
 
         {userInfo ? (
           <Stack direction={"row"} alignItems={"center"} gap={5}>
-            {/* <Typography component={Link} href="/profile" fontWeight={700}>
-              Profile
-            </Typography>
-            <Button color="error">Logout</Button> */}
             <ProfileMenu userInfo={userInfo} handleLogOut={handleLogOut} />
           </Stack>
         ) : (

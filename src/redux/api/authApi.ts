@@ -5,7 +5,7 @@ const authApi = baseApi.injectEndpoints({
 
     // login
     login: build.mutation({
-      query: (data:any) =>({
+      query: (data: any) => ({
         url: `/login`,
         method: 'POST',
         body: data,
@@ -14,13 +14,21 @@ const authApi = baseApi.injectEndpoints({
 
     // register
     register: build.mutation({
-      query: (data:any) =>({
+      query: (data: any) => ({
         url: `/register`,
         method: 'POST',
+        body: data,
+      }),
+    }),
+    // register
+    updateProfile: build.mutation({
+      query: (data: any) => ({
+        url: `/profile`,
+        method: 'PUT',
         body: data,
       }),
     }),
   }),
 })
 
-export const { useLoginMutation,useRegisterMutation } = authApi
+export const { useLoginMutation, useRegisterMutation,useUpdateProfileMutation } = authApi

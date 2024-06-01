@@ -2,6 +2,9 @@
 import CPCheckbox from "@/components/Froms/CPCheck";
 import CPForm from "@/components/Froms/CPFrom";
 import CPInput from "@/components/Froms/CPInput";
+import { usePetAdoptionRequestMutation } from "@/redux/api/petApi";
+import { decodedToken } from "@/utils/jwt";
+import { getFromLocalStorage } from "@/utils/localStorage";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Box,
@@ -13,6 +16,7 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
+import { JwtPayload } from "jwt-decode";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React from "react";
@@ -30,13 +34,28 @@ export const validationSchema = z.object({
 
 // start login page
 
-const AdoptionRequest = () => {
+const AdoptionRequest = ({ params }: any) => {
+  console.log(params.id);
   const [error, setError] = useState("");
-  // handle login button
+  const [petAdoptionRequest, { isLoading }] = usePetAdoptionRequestMutation();
+
+  const token = getFromLocalStorage("accessToken");
+
+  const user = decodedToken(token);
+  console.log(user);
+  // handle submit adoption request button
   const router = useRouter();
   const handleSubmit = async (values: FieldValues) => {
+    const adoptionData = {
+      petId: params.id,
+      petOwnershipExperience: values.additionalInfo,
+    };
+
     try {
-      console.log(values);
+      const res = await petAdoptionRequest(adoptionData).unwrap();
+      if (res?.data?.id) {
+        alert("Adoption Request is success");
+      }
     } catch (err: any) {
       console.error(err.message);
       setError(err.message);
@@ -101,7 +120,7 @@ const AdoptionRequest = () => {
               onSubmit={handleSubmit}
               resolver={zodResolver(validationSchema)}
               defaultValues={{
-                email: "",
+                email: user?.email,
                 additionalInfo: "",
               }}
             >

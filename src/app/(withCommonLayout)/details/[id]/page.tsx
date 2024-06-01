@@ -43,7 +43,7 @@ const PetDetails = async ({ params }: any) => {
             Adoption Requirements: {pet.adoptionRequirements}
           </Typography>
 
-          <Link href="/adoption-request" passHref>
+          <Link href={`/adoption-request/${pet?.id}`} passHref>
             <Button variant="contained" color="primary">
               Adoption Request
             </Button>

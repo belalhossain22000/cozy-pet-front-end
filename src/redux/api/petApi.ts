@@ -18,8 +18,16 @@ const petApi = baseApi.injectEndpoints({
         method: 'GET',
       }),
     }),
+    // get single pet
+    petAdoptionRequest: build.mutation({
+      query: (data:any) =>({
+        url: `/adoption-request`,
+        method: 'POST',
+        body: data,
+      }),
+    }),
 
   }),
 })
 
-export const { useGetAllPetsQuery,useGetSinglePetQuery } = petApi
+export const { useGetAllPetsQuery,useGetSinglePetQuery,usePetAdoptionRequestMutation } = petApi
