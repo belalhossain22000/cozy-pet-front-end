@@ -1,9 +1,24 @@
-"use client"
+"use client";
 // components/AdoptedPets.tsx
 import React, { useEffect, useState } from "react";
-
-import { Avatar, Box, Button, Container, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, Paper } from "@mui/material";
+import { format } from "date-fns";
+import {
+  Avatar,
+  Box,
+  Button,
+  Container,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Typography,
+  Paper,
+} from "@mui/material";
 import { fetchAdoptedPets } from "@/utils/fetchPets";
+import { useGetPetAdoptionRequestQuery } from "@/redux/api/petApi";
+import Link from "next/link";
 
 interface Pet {
   id: number;
@@ -14,16 +29,13 @@ interface Pet {
 }
 
 const AdoptedPets: React.FC = () => {
-  const [pets, setPets] = useState<Pet[]>([]);
+  const { data, isLoading } = useGetPetAdoptionRequestQuery(undefined);
 
-  useEffect(() => {
-    const getPets = async () => {
-      const adoptedPets = await fetchAdoptedPets();
-      setPets(adoptedPets);
-    };
-
-    getPets();
-  }, []);
+  if (isLoading) {
+    return <h1>loading...</h1>;
+  }
+  console.log(data?.data);
+  const pets = data?.data;
 
   return (
     <Container>
@@ -41,17 +53,21 @@ const AdoptedPets: React.FC = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {pets.map((pet) => (
+            {pets?.map((pet: any) => (
               <TableRow key={pet.id}>
                 <TableCell>
-                  <Avatar src={pet.photo} alt={pet.name} />
+                  <Avatar src={pet?.photo} alt={pet?.name} />
                 </TableCell>
-                <TableCell>{pet.name}</TableCell>
-                <TableCell>{pet.adoptionDate}</TableCell>
+                <TableCell>{pet?.name}</TableCell>
                 <TableCell>
-                  <Button variant="contained" color="primary" href={pet.detailsPage}>
-                    View Details
-                  </Button>
+                  {pet?.createdAt
+                    ? format(new Date(pet.createdAt), "PPpp")
+                    : "N/A"}
+                </TableCell>
+                <TableCell>
+                  <Link href={`/details/${pet?.id}`} passHref>
+                    <Button component="a">View Details</Button>
+                  </Link>
                 </TableCell>
               </TableRow>
             ))}
