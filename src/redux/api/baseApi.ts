@@ -15,5 +15,6 @@ export const baseApi = createApi({
         }
     }),
     endpoints: () => ({}),
+    tagTypes: ["Users", "Pets", "AdoptionRequests","Auth"],
 })
 

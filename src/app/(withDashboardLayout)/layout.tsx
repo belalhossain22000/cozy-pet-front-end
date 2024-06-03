@@ -55,10 +55,12 @@ export default function DashboardLayout(props: Props) {
       <Divider />
       <List>
         {[
-          { text: "Home", href: "/" },
+         
           { text: "Dashboard", href: "/dashboard" },
           { text: "Users", href: "/dashboard/users" },
           { text: "Add Pet", href: "/dashboard/add-pet" },
+          { text: "Pets", href: "/dashboard/pets" },
+          { text: "Home", href: "/" },
         ].map((item, index) => (
           <ListItem key={item.text} disablePadding>
             <ListItemButton component={Link} href={item.href}>

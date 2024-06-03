@@ -2,7 +2,7 @@
 
 import CPForm from "@/components/Froms/CPFrom";
 import CPInput from "@/components/Froms/CPInput";
-import { useAddPetMutation } from "@/redux/api/petApi";
+import { useGetSinglePetQuery, useUpdatePetMutation } from "@/redux/api/petApi";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Box, Button, Container, Grid, Stack, Typography } from "@mui/material";
 import { useRouter } from "next/navigation";
@@ -16,8 +16,8 @@ export const validationSchema = z.object({
   name: z.string().nonempty("Please enter the pet's name"),
   photo: z.string().nonempty("Please enter the pet's image link"),
   description: z.string().nonempty("Please enter a detailed description"),
-  age: z.string().nonempty("Please enter a positive number"),
-  breed: z.string().nonempty("Please enter the breed"),
+  age: z.number().positive("Please enter a positive number"),
+  breed: z.string().nonempty("Please enter the gender"),
   temperament: z.string().nonempty("Please enter the temperament"),
   size: z.string().nonempty("Please enter the size"),
   gender: z.enum(["Male", "Female"]),
@@ -31,28 +31,38 @@ export const validationSchema = z.object({
 
 // start Add New Pets page
 
-const AddPet = () => {
+const EditPet = ({ params }: any) => {
   const [error, setError] = useState("");
-  const [AddPet, { isLoading }] = useAddPetMutation();
+  const { data, isLoading } = useGetSinglePetQuery(params?.id);
+  const [updatePet] = useUpdatePetMutation();
+  const pet = data?.data;
   // handle add pet button
   const router = useRouter();
-  const handleAddPet = async (values: FieldValues) => {
+
+  // const handleUpdate pet
+  const handleUpdatePet = async (values: FieldValues) => {
     const age = Number(values.age);
     values.age = age;
     console.log(values);
 
+    const payload = { id: pet?.id, updatedDAta: values };
+
     try {
-      const res = await AddPet(values).unwrap();
+      const res = await updatePet(payload).unwrap();
       if (res?.data?.id) {
-        alert("Pet added successfully!");
+        alert("Pet updated successfully!");
       }
-      console.log(values);
+      // console.log(values);
     } catch (err: any) {
       console.error(err.message);
       setError(err.message);
     }
   };
 
+ 
+  if (isLoading) {
+    return <h1>Loading...</h1>;
+  }
   return (
     <Container>
       <Stack
@@ -108,17 +118,21 @@ const AddPet = () => {
 
           <Box>
             <CPForm
-              onSubmit={handleAddPet}
+              onSubmit={handleUpdatePet}
               resolver={zodResolver(validationSchema)}
               defaultValues={{
-                name: "",
-                photos: null,
-                description: "",
-                age: "",
-                breed: "",
-                gender: "Male",
-                healthStatus: "",
-                location: "",
+                name: pet?.name,
+                photo: pet?.photo,
+                description: pet?.description,
+                age: pet?.age,
+                size: pet?.size,
+                species: pet?.species,
+                breed: pet?.breed,
+                gender: pet?.gender,
+                medicalHistory: pet?.medicalHistory,
+                location: pet?.location,
+                temperament: pet?.temperament,
+                adoptionRequirements: pet?.adoptionRequirements,
               }}
             >
               <Grid container spacing={2} my={1}>
@@ -207,7 +221,7 @@ const AddPet = () => {
                 fullWidth
                 type="submit"
               >
-                {isLoading ? "Adding pet" : "Add Pet"}
+                {isLoading ? "Updating pet" : "Update"}
               </Button>
             </CPForm>
           </Box>
@@ -217,4 +231,4 @@ const AddPet = () => {
   );
 };
 
-export default AddPet;
+export default EditPet;

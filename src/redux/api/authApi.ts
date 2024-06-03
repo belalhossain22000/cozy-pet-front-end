@@ -10,6 +10,7 @@ const authApi = baseApi.injectEndpoints({
         method: 'POST',
         body: data,
       }),
+      invalidatesTags: ["Auth"],
     }),
 
     // register
@@ -19,6 +20,7 @@ const authApi = baseApi.injectEndpoints({
         method: 'POST',
         body: data,
       }),
+      invalidatesTags: ["Auth"],
     }),
     // register
     updateProfile: build.mutation({
@@ -27,6 +29,8 @@ const authApi = baseApi.injectEndpoints({
         method: 'PUT',
         body: data,
       }),
+      invalidatesTags: ["Auth"],
+
     }),
     // register
     changePassword: build.mutation({
@@ -35,6 +39,7 @@ const authApi = baseApi.injectEndpoints({
         method: 'PUT',
         body: data,
       }),
+      invalidatesTags: ["Auth"],
     }),
   }),
 })

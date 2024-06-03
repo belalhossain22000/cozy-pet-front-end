@@ -9,17 +9,19 @@ const usersApi = baseApi.injectEndpoints({
                 url: `/users`,
                 method: 'GET',
             }),
+            providesTags: ["Users"],
         }),
         // get all pet
         updateUsers: build.mutation({
             query: (payload: any) => {
-                console.log(payload.role);
                 return {
                     url: `/user/${payload?.id}`,
                     method: 'PUT',
                     body: { role: payload.role }
                 }
+
             },
+            invalidatesTags:["Users"],
         }),
         // get all pet
         updateUsersStatus: build.mutation({
@@ -30,6 +32,7 @@ const usersApi = baseApi.injectEndpoints({
                     body: { isActive: payload.isActive }
                 }
             },
+            invalidatesTags:["Users"],
         }),
 
 
