@@ -1,6 +1,7 @@
 "use client";
 
 import ProfileMenu from "@/components/ProfileMenu/ProfileMenu";
+import { logoutUser } from "@/service/actions/logoutUser";
 import { decodedToken } from "@/utils/jwt";
 import {
   getFromLocalStorage,
@@ -16,14 +17,15 @@ const Navbar = () => {
   const token: string | null = getFromLocalStorage("accessToken");
   let userInfo;
   if (token !== null) {
-    userInfo = decodedToken(token);
+    userInfo = decodedToken(token) as any;
   } else {
-    userInfo = null; 
+    userInfo = null;
     console.error("No access token found");
   }
 
   const handleLogOut = () => {
     removeUserFromLocalStorage();
+    logoutUser(router);
     router.push("/login");
   };
 
@@ -52,7 +54,7 @@ const Navbar = () => {
             About Us
           </Typography>
 
-          {userInfo ? (
+          {userInfo?.role === "ADMIN" ? (
             <Typography component={Link} href="/dashboard" fontWeight={700}>
               Dashboard
             </Typography>

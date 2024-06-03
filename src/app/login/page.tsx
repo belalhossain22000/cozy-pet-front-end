@@ -2,9 +2,11 @@
 import CPForm from "@/components/Froms/CPFrom";
 import CPInput from "@/components/Froms/CPInput";
 import { useLoginMutation } from "@/redux/api/authApi";
+import { usersLogin } from "@/service/actions/usersLogin";
 import { setUserIntoLocalStorage } from "@/utils/localStorage";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Box, Button, Container, Grid, Stack, Typography } from "@mui/material";
+import { cookies } from "next/headers";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React from "react";
@@ -26,13 +28,12 @@ const LoginPage = () => {
   const router = useRouter();
   const handleLogin = async (values: FieldValues) => {
     try {
-      const res = await login(values).unwrap();
+       const res = await usersLogin(values);;
       if (res.data.id) {
         alert("login success");
         setUserIntoLocalStorage(res?.data?.token);
         router.push("/");
       }
-      console.log(res);
     } catch (err: any) {
       console.error(err.message);
     }
