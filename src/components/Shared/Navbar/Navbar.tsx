@@ -7,12 +7,18 @@ import {
   getFromLocalStorage,
   removeUserFromLocalStorage,
 } from "@/utils/localStorage";
-import { Box, Button, Container, Stack, Typography } from "@mui/material";
+import { AppBar, Box, Button, Container, IconButton, Menu, MenuItem, Stack, Toolbar, Typography } from "@mui/material";
+import MenuIcon from '@mui/icons-material/Menu';
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { useTheme, useMediaQuery } from "@mui/material";
 
 const Navbar = () => {
   const router = useRouter();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   const token: string | null = getFromLocalStorage("accessToken");
   let userInfo;
@@ -29,49 +35,83 @@ const Navbar = () => {
     router.push("/login");
   };
 
-  // console.log(userInfo)
+  const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
+
   return (
-    <Container>
-      <Stack
-        py={2}
-        direction="row"
-        justifyContent="space-between"
-        alignItems="center"
-      >
-        <Typography variant="h4" component={Link} href="/" fontWeight={600}>
-          <Box component="span" color="primary.main">
-            Cozy
-          </Box>{" "}
-          Pets
-        </Typography>
-
-        <Stack direction="row" justifyContent="space-between" gap={4}>
-          <Typography component={Link} href="/" fontWeight={700}>
-            Home
+    <AppBar position="static" color="default">
+      <Container>
+        <Toolbar>
+          <Typography variant="h4" component={Link} href="/" fontWeight={600} sx={{ flexGrow: 1 }}>
+            <Box component="span" color="primary.main">
+              Cozy
+            </Box>{" "}
+            Pets
           </Typography>
 
-          <Typography component={Link} href="/about-us" fontWeight={700}>
-            About Us
-          </Typography>
+          {isMobile ? (
+            <>
+              <IconButton
+                edge="start"
+                color="inherit"
+                aria-label="menu"
+                onClick={handleMenuOpen}
+              >
+                <MenuIcon />
+              </IconButton>
+              <Menu
+                anchorEl={anchorEl}
+                anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+                keepMounted
+                transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+                open={Boolean(anchorEl)}
+                onClose={handleMenuClose}
+              >
+                <MenuItem component={Link} href="/" onClick={handleMenuClose}>Home</MenuItem>
+                <MenuItem component={Link} href="/about-us" onClick={handleMenuClose}>About Us</MenuItem>
+                {userInfo?.role === "ADMIN" && (
+                  <MenuItem component={Link} href="/dashboard" onClick={handleMenuClose}>Dashboard</MenuItem>
+                )}
+                {userInfo ? (
+                  <ProfileMenu userInfo={userInfo} handleLogOut={handleLogOut} />
+                ) : (
+                  <MenuItem component={Link} href="/login" onClick={handleMenuClose}>Login</MenuItem>
+                )}
+              </Menu>
+            </>
+          ) : (
+            <Stack direction="row" alignItems="center" spacing={4}>
+              <Typography component={Link} href="/" fontWeight={700}>
+                Home
+              </Typography>
 
-          {userInfo?.role === "ADMIN" ? (
-            <Typography component={Link} href="/dashboard" fontWeight={700}>
-              Dashboard
-            </Typography>
-          ) : null}
-        </Stack>
+              <Typography component={Link} href="/about-us" fontWeight={700}>
+                About Us
+              </Typography>
 
-        {userInfo ? (
-          <Stack direction={"row"} alignItems={"center"} gap={5}>
-            <ProfileMenu userInfo={userInfo} handleLogOut={handleLogOut} />
-          </Stack>
-        ) : (
-          <Button component={Link} href="/login">
-            Login
-          </Button>
-        )}
-      </Stack>
-    </Container>
+              {userInfo?.role === "ADMIN" && (
+                <Typography component={Link} href="/dashboard" fontWeight={700}>
+                  Dashboard
+                </Typography>
+              )}
+
+              {userInfo ? (
+                <ProfileMenu userInfo={userInfo} handleLogOut={handleLogOut} />
+              ) : (
+                <Button component={Link} href="/login">
+                  Login
+                </Button>
+              )}
+            </Stack>
+          )}
+        </Toolbar>
+      </Container>
+    </AppBar>
   );
 };
 
