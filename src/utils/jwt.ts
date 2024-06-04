@@ -2,18 +2,18 @@ import { jwtDecode } from "jwt-decode";
 
 export const decodedToken = (token: string) => {
   if (!token) {
-    throw new Error('Token is required');
+   return 'unauthorized access';
 }
 
 const parts = token.split('.');
 if (parts.length !== 3) {
-    throw new Error('Invalid token format');
+    return 'unauthorized access';
 }
 
 try {
     return jwtDecode(token);
 } catch (error) {
     console.error('Failed to decode token:', error);
-    throw new Error('Invalid token');
+    return 'unauthorized access';
 }
 };

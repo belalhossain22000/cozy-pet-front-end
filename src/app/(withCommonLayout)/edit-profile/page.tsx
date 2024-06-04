@@ -1,9 +1,10 @@
 "use client";
+
 import CPForm from "@/components/Froms/CPFrom";
 import CPInput from "@/components/Froms/CPInput";
 import { useUpdateProfileMutation } from "@/redux/api/authApi";
 import { getUser } from "@/utils/user";
-
+import { Toaster, toast } from "sonner";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Box, Button, Container, Grid, Stack, Typography } from "@mui/material";
 import { useRouter } from "next/navigation";
@@ -12,7 +13,7 @@ import { useState } from "react";
 import { FieldValues } from "react-hook-form";
 import { z } from "zod";
 // zod validation schema
-export const validationSchema = z.object({
+const validationSchema = z.object({
   email: z.string().email("Please enter a valid email address!"),
   name: z.string(),
 });
@@ -21,16 +22,16 @@ export const validationSchema = z.object({
 
 const EditProfile = () => {
   const [error, setError] = useState("");
-  const user = getUser();
+  const user = getUser() as any;
   const [updateProfile, { isLoading }] = useUpdateProfileMutation();
-  console.log(user);
+
   // handle login button
   const router = useRouter();
   const handleProfileUpdate = async (values: FieldValues) => {
     try {
-      const res = await updateProfile(values).unwrap()
-      if(res?.data?.id){
-        alert("Profile updated successfully")
+      const res = await updateProfile(values).unwrap();
+      if (res?.data?.id) {
+        alert("Profile updated successfully");
       }
       console.log(res);
     } catch (err: any) {
@@ -118,7 +119,7 @@ const EditProfile = () => {
                   />
                 </Grid>
               </Grid>
-
+              <Toaster />
               <Button
                 sx={{
                   margin: "10px 0px",

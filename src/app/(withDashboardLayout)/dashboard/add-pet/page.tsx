@@ -12,7 +12,7 @@ import { FieldValues } from "react-hook-form";
 import { z } from "zod";
 
 // zod validation schema
-export const validationSchema = z.object({
+ const validationSchema = z.object({
   name: z.string().nonempty("Please enter the pet's name"),
   photo: z.string().nonempty("Please enter the pet's image link"),
   description: z.string().nonempty("Please enter a detailed description"),

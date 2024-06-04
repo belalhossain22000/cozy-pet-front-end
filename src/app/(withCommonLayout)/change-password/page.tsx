@@ -12,7 +12,7 @@ import { FieldValues } from "react-hook-form";
 import { z } from "zod";
 
 // zod validation schema
-export const validationSchema = z
+ const validationSchema = z
   .object({
     oldPassword: z
       .string()

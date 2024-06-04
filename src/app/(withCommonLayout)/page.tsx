@@ -12,7 +12,7 @@ import { useState } from "react";
 import { FieldValues } from "react-hook-form";
 import { z } from "zod";
 
-export const validationSchema = z.object({
+ const validationSchema = z.object({
   searchValue: z.string(),
 });
 

@@ -24,7 +24,7 @@ import { useState } from "react";
 import { FieldValues } from "react-hook-form";
 import { z } from "zod";
 // zod validation schema
-export const validationSchema = z.object({
+const validationSchema = z.object({
   email: z.string().email("Please enter a valid email address!"),
   additionalInfo: z.string().min(6, "Must be at least 6 characters"),
   termsAndConditions: z.boolean().refine((value) => value === true, {
@@ -40,9 +40,10 @@ const AdoptionRequest = ({ params }: any) => {
   const [petAdoptionRequest, { isLoading }] = usePetAdoptionRequestMutation();
 
   const token = getFromLocalStorage("accessToken");
-
-  const user = decodedToken(token);
-  console.log(user);
+  let user;
+  if (token) {
+    user = decodedToken(token) as any;
+  }
   // handle submit adoption request button
   const router = useRouter();
   const handleSubmit = async (values: FieldValues) => {

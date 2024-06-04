@@ -24,11 +24,11 @@ const drawerWidth = 240;
 
 interface Props {
   children: React.ReactNode;
-  window?: () => Window;
+  // window?: Window;
 }
 
-export default function DashboardLayout(props: Props) {
-  const { window } = props;
+ const DashboardLayout=(props: Props)=> {
+  // const { window } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [isClosing, setIsClosing] = React.useState(false);
 
@@ -81,8 +81,8 @@ export default function DashboardLayout(props: Props) {
     </div>
   );
 
-  const container =
-    window !== undefined ? () => window().document.body : undefined;
+  // const container =
+  //   window !== undefined ? () => window().document.body : undefined;
 
   return (
     <Container>
@@ -116,7 +116,7 @@ export default function DashboardLayout(props: Props) {
           aria-label="mailbox folders"
         >
           <Drawer
-            container={container}
+            // container={container}
             variant="temporary"
             open={mobileOpen}
             onTransitionEnd={handleDrawerTransitionEnd}
@@ -163,3 +163,4 @@ export default function DashboardLayout(props: Props) {
     </Container>
   );
 }
+export default DashboardLayout

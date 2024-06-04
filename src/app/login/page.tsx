@@ -14,7 +14,7 @@ import { useState } from "react";
 import { FieldValues } from "react-hook-form";
 import { z } from "zod";
 // zod validation schema
-export const validationSchema = z.object({
+ const validationSchema = z.object({
   email: z.string().email("Please enter a valid email address!"),
   password: z.string().min(6, "Must be at least 6 characters"),
 });

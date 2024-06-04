@@ -12,13 +12,12 @@ const ProfilePage = () => {
   const token: string | null = getFromLocalStorage("accessToken");
   let userInfo: UserInfo | null = null;
   if (token !== null) {
-    userInfo = decodedToken(token);
+    userInfo = decodedToken(token) as any;
   } else {
     userInfo = null;
     console.error("No access token found");
   }
 
-  console.log(userInfo);
 
   return (
     <Container>
