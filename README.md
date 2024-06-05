@@ -1,10 +1,67 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Cozy Pets - Frontend
+
+Welcome to the Cozy Pets frontend repository. This project is built using Next.js and Material-UI to provide a responsive and user-friendly interface for pet adoption services.
+
+## Live URL
+
+Check out the live application at: [Cozy Pets](https://cozy-pet-front-end.vercel.app)
+
+## Table of Contents
+
+- [Features](#features)
+- [Technology Used](#technology-used)
+- [Getting Started](#getting-started)
+- [Development](#development)
+- [Learn More](#learn-more)
+- [Deployment](#deployment)
+- [Contributing](#contributing)
+- [License](#license)
+
+## Features
+
+- **User Authentication**: Register and log in to access personalized features.
+- **Pet Search**: Easily search for pets based on different criteria.
+- **Pet Details**: View detailed information about each pet.
+- **User Dashboard**: Admin dashboard to manage pets and users.
+- **Adoption Requests**: Submit and manage adoption requests.
+- **Responsive Design**: Optimized for all devices.
+
+## Technology Used
+
+- **Next.js**: The React Framework for Production.
+- **Material-UI**: React components for faster and easier web development.
+- **Tailwind CSS**: Utility-first CSS framework for rapid UI development.
 
 ## Getting Started
 
-First, run the development server:
+Follow these instructions to set up the project on your local machine.
 
-```bash
+### Prerequisites
+
+- Node.js (v14 or higher)
+- npm (v6 or higher)
+
+### Installation
+
+1. Clone the repository:
+
+   ```bash
+   git clone https://github.com/yourusername/cozy-pets-frontend.git
+2. Navigate to the project directory:
+
+   ```bash
+   cd cozy-pets-frontend
+
+3. Install the dependencies:
+
+   ```bash
+  npm install
+Environment Variables
+Create a .env.local file in the root directory and add the following environment variables:NEXT_PUBLIC_API_URL="your_api_url"
+
+
+Running the Development Server
+Start the development server:
 npm run dev
 # or
 yarn dev
@@ -12,25 +69,43 @@ yarn dev
 pnpm dev
 # or
 bun dev
-```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Open http://localhost:3000 with your browser to see the result.
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+You can start editing the page by modifying pages/index.tsx or other pages. The changes will automatically reflect in the browser.
 
-## Learn More
 
+Development
+Code Structure
+pages/: Contains the Next.js pages.
+components/: Contains the React components used across the project.
+styles/: Contains the global and component-specific styles.
+utils/: Contains utility functions.
+Commands
+Development Server: npm run dev
+Build: npm run build
+Start: npm start
+Learn More
 To learn more about Next.js, take a look at the following resources:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Next.js Documentation - learn about Next.js features and API.
+Learn Next.js - an interactive Next.js tutorial.
+You can check out the Next.js GitHub repository - your feedback and contributions are welcome!
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+Deployment
+The easiest way to deploy your Next.js app is to use the Vercel Platform from the creators of Next.js.
 
-## Deploy on Vercel
+Check out the Next.js deployment documentation for more details.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Contributing
+We welcome contributions from the community. To contribute:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+Fork the repository.
+Create a new branch.
+Make your changes.
+Submit a pull request.
+License
+This project is licensed under the MIT License.
+
+You can save this content in a `README.md` file in your project's root directory.

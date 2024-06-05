@@ -7,8 +7,19 @@ import {
   getFromLocalStorage,
   removeUserFromLocalStorage,
 } from "@/utils/localStorage";
-import { AppBar, Box, Button, Container, IconButton, Menu, MenuItem, Stack, Toolbar, Typography } from "@mui/material";
-import MenuIcon from '@mui/icons-material/Menu';
+import {
+  AppBar,
+  Box,
+  Button,
+  Container,
+  IconButton,
+  Menu,
+  MenuItem,
+  Stack,
+  Toolbar,
+  Typography,
+} from "@mui/material";
+import MenuIcon from "@mui/icons-material/Menu";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -22,12 +33,11 @@ const Navbar = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const { data, isLoading } = useGetMyProfileQuery(undefined);
   const userInfo = data?.data || {};
-  
-
   const handleLogOut = () => {
     removeUserFromLocalStorage();
     logoutUser(router);
-    router.push("/login");
+    document.cookie = "accessToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    window.location.reload();
   };
 
   const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
@@ -42,7 +52,13 @@ const Navbar = () => {
     <AppBar position="static" color="default">
       <Container>
         <Toolbar>
-          <Typography variant="h4" component={Link} href="/" fontWeight={600} sx={{ flexGrow: 1 }}>
+          <Typography
+            variant="h4"
+            component={Link}
+            href="/"
+            fontWeight={600}
+            sx={{ flexGrow: 1 }}
+          >
             <Box component="span" color="primary.main">
               Cozy
             </Box>{" "}
@@ -61,21 +77,44 @@ const Navbar = () => {
               </IconButton>
               <Menu
                 anchorEl={anchorEl}
-                anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+                anchorOrigin={{ vertical: "top", horizontal: "right" }}
                 keepMounted
-                transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+                transformOrigin={{ vertical: "top", horizontal: "right" }}
                 open={Boolean(anchorEl)}
                 onClose={handleMenuClose}
               >
-                <MenuItem component={Link} href="/" onClick={handleMenuClose}>Home</MenuItem>
-                <MenuItem component={Link} href="/about-us" onClick={handleMenuClose}>About Us</MenuItem>
+                <MenuItem component={Link} href="/" onClick={handleMenuClose}>
+                  Home
+                </MenuItem>
+                <MenuItem
+                  component={Link}
+                  href="/about-us"
+                  onClick={handleMenuClose}
+                >
+                  About Us
+                </MenuItem>
                 {userInfo?.role === "ADMIN" && (
-                  <MenuItem component={Link} href="/dashboard/users" onClick={handleMenuClose}>Dashboard</MenuItem>
+                  <MenuItem
+                    component={Link}
+                    href="/dashboard/users"
+                    onClick={handleMenuClose}
+                  >
+                    Dashboard
+                  </MenuItem>
                 )}
-                {userInfo ? (
-                  <ProfileMenu userInfo={userInfo} handleLogOut={handleLogOut} />
+                {userInfo?.id ? (
+                  <ProfileMenu
+                    userInfo={userInfo}
+                    handleLogOut={handleLogOut}
+                  />
                 ) : (
-                  <MenuItem component={Link} href="/login" onClick={handleMenuClose}>Login</MenuItem>
+                  <MenuItem
+                    component={Link}
+                    href="/login"
+                    onClick={handleMenuClose}
+                  >
+                    Login
+                  </MenuItem>
                 )}
               </Menu>
             </>
@@ -90,12 +129,16 @@ const Navbar = () => {
               </Typography>
 
               {userInfo?.role === "ADMIN" && (
-                <Typography component={Link} href="/dashboard" fontWeight={700}>
+                <Typography
+                  component={Link}
+                  href="/dashboard/users"
+                  fontWeight={700}
+                >
                   Dashboard
                 </Typography>
               )}
 
-              {userInfo ? (
+              {userInfo?.id ? (
                 <ProfileMenu userInfo={userInfo} handleLogOut={handleLogOut} />
               ) : (
                 <Button component={Link} href="/login">

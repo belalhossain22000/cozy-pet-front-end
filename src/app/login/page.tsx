@@ -14,7 +14,7 @@ import { useState } from "react";
 import { FieldValues } from "react-hook-form";
 import { z } from "zod";
 // zod validation schema
- const validationSchema = z.object({
+const validationSchema = z.object({
   email: z.string().email("Please enter a valid email address!"),
   password: z.string().min(6, "Must be at least 6 characters"),
 });
@@ -26,9 +26,10 @@ const LoginPage = () => {
   const [login, { isLoading }] = useLoginMutation();
   // handle login button
   const router = useRouter();
+
   const handleLogin = async (values: FieldValues) => {
     try {
-       const res = await usersLogin(values);;
+      const res = await usersLogin(values);
       if (res.data.id) {
         alert("login success");
         setUserIntoLocalStorage(res?.data?.token);
@@ -152,13 +153,14 @@ const LoginPage = () => {
                   Create an account
                 </Link>
               </Typography>
-              <Typography component="p" fontWeight={300}>
-               Back to {" "}
-                <Link
-                  href="/"
-                  className="hover:text-blue-500 hover:underline"
-                >
-                 Home
+              <Typography
+                component="p"
+                fontWeight={300}
+              
+              >
+                Back to{" "}
+                <Link  href="/" className="hover:text-blue-500 hover:underline">
+                  Home
                 </Link>
               </Typography>
             </CPForm>
