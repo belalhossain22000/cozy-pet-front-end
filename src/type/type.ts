@@ -5,6 +5,7 @@ export interface IPet {
     name: string;
     species: string;
     breed: string;
+    photo:string;
     age: number;
     size: string;
     location: string;
@@ -12,8 +13,8 @@ export interface IPet {
     temperament: string;
     medicalHistory: string;
     adoptionRequirements: string;
-    createdAt: string; // Consider using Date type if you plan to work with date objects
-    updatedAt: string; // Consider using Date type if you plan to work with date objects
+    createdAt: string; 
+    updatedAt: string; 
   }
   
 

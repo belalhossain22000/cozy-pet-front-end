@@ -1,4 +1,4 @@
-// components/PetCard.js
+
 import React from "react";
 import {
   Card,
@@ -10,61 +10,60 @@ import {
   Button,
 } from "@mui/material";
 import { IPet } from "@/type/type";
-import dog1 from "@/assets/dogs/dog1.jpg";
 import Link from "next/link";
 
 const StyledCard = styled(Card)(({ theme }) => ({
   position: "relative",
-  "&:hover .hoverOverlay": {
-    opacity: 1,
+  borderRadius: theme.shape.borderRadius,
+  boxShadow: theme.shadows[5],
+  transition: "transform 0.3s, box-shadow 0.3s",
+  "&:hover": {
+    transform: "translateY(-5px)",
+    boxShadow: theme.shadows[10],
   },
 }));
 
-const HoverOverlay = styled(Box)(({ theme }) => ({
-  position: "absolute",
-  top: 0,
-  left: 0,
-  width: "100%",
-  height: "50%",
-  backgroundColor: "rgba(255, 0, 0, 0.6)",
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-  opacity: 0,
-  transition: "opacity 0.3s ease",
+const StyledCardContent = styled(CardContent)(({ theme }) => ({
+  padding: theme.spacing(2),
+  "& .MuiTypography-h5": {
+    fontWeight: theme.typography.fontWeightBold,
+  },
+  "& .MuiTypography-body2": {
+    marginTop: theme.spacing(1),
+  },
 }));
 
 const PetCard = ({ pet }: { pet: IPet }) => {
-  const { name } = pet || {};
-
   return (
     <StyledCard>
-      <CardMedia component="img" height="200" image={dog1.src} alt={pet.name} />
-      <HoverOverlay className="hoverOverlay">
-        <Typography variant="h6" color="white">
-          Adoption
-        </Typography>
-      </HoverOverlay>
-      <CardContent>
+      <CardMedia
+        component="img"
+        height="200"
+        image={pet?.photo}
+        alt={pet?.name}
+      />
+      <StyledCardContent>
         <Typography variant="h5">{pet?.name}</Typography>
         <Typography variant="body2" color="textSecondary">
-          Breed: {pet?.breed}
+          <strong>Breed:</strong> {pet?.breed}
         </Typography>
         <Typography variant="body2" color="textSecondary">
-          Age: {pet?.age}
+          <strong>Age:</strong> {pet?.age}
         </Typography>
         <Typography variant="body2" color="textSecondary">
-          Location: {pet?.location}
+          <strong>Location:</strong> {pet?.location}
         </Typography>
         <Typography variant="body2" color="textSecondary">
-          Description: {pet?.description.slice(0, 50)} ... see more
+          <strong>Description:</strong> {pet?.description.slice(0, 50)}... see more
         </Typography>
-        <Link href={`/details/${pet?.id}`}  passHref>
-          <Button component="a">
-            Details
-          </Button>
-        </Link>
-      </CardContent>
+        <Box mt={2}>
+          <Link href={`/details/${pet?.id}`} passHref>
+            <Button variant="contained" color="primary" component="a">
+              Details
+            </Button>
+          </Link>
+        </Box>
+      </StyledCardContent>
     </StyledCard>
   );
 };

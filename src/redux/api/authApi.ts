@@ -33,6 +33,15 @@ const authApi = baseApi.injectEndpoints({
 
     }),
     // register
+    getMyProfile: build.query({
+      query: () => ({
+        url: `/profile`,
+        method: 'GET',
+      }),
+      providesTags: ["Auth"],
+
+    }),
+    // register
     changePassword: build.mutation({
       query: (data: any) => ({
         url: `/change-password`,
@@ -44,4 +53,4 @@ const authApi = baseApi.injectEndpoints({
   }),
 })
 
-export const { useLoginMutation, useRegisterMutation,useUpdateProfileMutation,useChangePasswordMutation } = authApi
+export const { useLoginMutation, useRegisterMutation,useUpdateProfileMutation,useChangePasswordMutation,useGetMyProfileQuery } = authApi

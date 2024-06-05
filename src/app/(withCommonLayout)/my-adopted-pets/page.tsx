@@ -34,7 +34,6 @@ const AdoptedPets: React.FC = () => {
   if (isLoading) {
     return <h1>loading...</h1>;
   }
-  console.log(data?.data);
   const pets = data?.data;
 
   return (

@@ -19,6 +19,7 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Link from "next/link";
 import { Container } from "@mui/material";
+import { useGetMyProfileQuery } from "@/redux/api/authApi";
 
 const drawerWidth = 240;
 
@@ -27,11 +28,12 @@ interface Props {
   // window?: Window;
 }
 
- const DashboardLayout=(props: Props)=> {
+const DashboardLayout = (props: Props) => {
   // const { window } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [isClosing, setIsClosing] = React.useState(false);
-
+  const { data, isLoading } = useGetMyProfileQuery(undefined);
+  const userInfo = data?.data || {};
   const handleDrawerClose = () => {
     setIsClosing(true);
     setMobileOpen(false);
@@ -50,12 +52,22 @@ interface Props {
   const drawer = (
     <div>
       <Toolbar>
-        <Typography>Cozy Pet</Typography>
+        <Typography
+          variant="h4"
+          component={Link}
+          href="/"
+          fontWeight={600}
+          sx={{ flexGrow: 1 }}
+        >
+          <Box component="span" color="primary.main">
+            Cozy
+          </Box>{" "}
+          Pets
+        </Typography>
       </Toolbar>
       <Divider />
       <List>
         {[
-         
           { text: "Dashboard", href: "/dashboard" },
           { text: "Users", href: "/dashboard/users" },
           { text: "Add Pet", href: "/dashboard/add-pet" },
@@ -105,9 +117,13 @@ interface Props {
             >
               <MenuIcon />
             </IconButton>
-            <Typography variant="h6" noWrap component="div">
-              Responsive drawer
-            </Typography>
+            <Typography variant="h6" component={Link} href="/" fontWeight={600} sx={{ flexGrow: 1 }}>
+            <Box component="span" color="secondary.mian">
+             {userInfo?.name}
+            </Box>{" "}
+            Wellcome to Cozy pet
+          </Typography>
+
           </Toolbar>
         </AppBar>
         <Box
@@ -162,5 +178,5 @@ interface Props {
       </Box>
     </Container>
   );
-}
-export default DashboardLayout
+};
+export default DashboardLayout;

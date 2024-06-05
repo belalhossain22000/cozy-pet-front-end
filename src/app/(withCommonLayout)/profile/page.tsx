@@ -2,22 +2,27 @@
 
 import { decodedToken } from "@/utils/jwt";
 import { getFromLocalStorage } from "@/utils/localStorage";
-import { Avatar, Box, Button, Container, Stack, Typography } from "@mui/material";
+import {
+  Avatar,
+  Box,
+  Button,
+  Container,
+  Stack,
+  Typography,
+} from "@mui/material";
 import profile from "@/assets/images/profile.jpg";
 import React from "react";
 import { UserInfo } from "@/type/type";
 import Link from "next/link";
+import { useGetMyProfileQuery } from "@/redux/api/authApi";
 
 const ProfilePage = () => {
-  const token: string | null = getFromLocalStorage("accessToken");
-  let userInfo: UserInfo | null = null;
-  if (token !== null) {
-    userInfo = decodedToken(token) as any;
-  } else {
-    userInfo = null;
-    console.error("No access token found");
-  }
+  const { data, isLoading } = useGetMyProfileQuery(undefined);
+  const userInfo = data?.data || {};
 
+  if (isLoading) {
+    return <h1>Loading...</h1>;
+  }
 
   return (
     <Container>
@@ -36,12 +41,10 @@ const ProfilePage = () => {
           <Typography variant="body1">{userInfo?.email}</Typography>
         </Box>
         <Link href="/edit-profile">
-        <Button>Edit profile</Button>
-
+          <Button>Edit profile</Button>
         </Link>
         <Link href="/change-password">
-        <Button>Change Password</Button>
-
+          <Button>Change Password</Button>
         </Link>
       </Stack>
     </Container>

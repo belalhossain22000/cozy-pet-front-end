@@ -1,43 +1,47 @@
 "use client";
+
 import CPForm from "@/components/Froms/CPFrom";
 import CPInput from "@/components/Froms/CPInput";
-import { useLoginMutation } from "@/redux/api/authApi";
-import { usersLogin } from "@/service/actions/usersLogin";
-import { setUserIntoLocalStorage } from "@/utils/localStorage";
+import { useGetMyProfileQuery, useUpdateProfileMutation } from "@/redux/api/authApi";
+import { getUser } from "@/utils/user";
+import { Toaster, toast } from "sonner";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Box, Button, Container, Grid, Stack, Typography } from "@mui/material";
-import { cookies } from "next/headers";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React from "react";
 import { useState } from "react";
 import { FieldValues } from "react-hook-form";
 import { z } from "zod";
 // zod validation schema
- const validationSchema = z.object({
+const validationSchema = z.object({
   email: z.string().email("Please enter a valid email address!"),
-  password: z.string().min(6, "Must be at least 6 characters"),
+  name: z.string(),
 });
 
 // start login page
 
-const LoginPage = () => {
+const EditProfile = () => {
   const [error, setError] = useState("");
-  const [login, { isLoading }] = useLoginMutation();
+  const { data, isLoading:loading } = useGetMyProfileQuery(undefined);
+
+  const user = data?.data || {};
+  const [updateProfile, { isLoading }] = useUpdateProfileMutation();
+
   // handle login button
   const router = useRouter();
-  const handleLogin = async (values: FieldValues) => {
+  const handleProfileUpdate = async (values: FieldValues) => {
     try {
-       const res = await usersLogin(values);;
-      if (res.data.id) {
-        alert("login success");
-        setUserIntoLocalStorage(res?.data?.token);
-        router.push("/");
+      const res = await updateProfile(values).unwrap();
+      if (res?.data?.id) {
+        alert("Profile updated successfully");
       }
     } catch (err: any) {
       console.error(err.message);
     }
   };
+  if(loading){
+    return <h1>loading...</h1>
+  }
 
   return (
     <Container>
@@ -71,7 +75,7 @@ const LoginPage = () => {
             </Box>
             <Box>
               <Typography variant="h6" fontWeight={600}>
-                Login Cozy Pets
+                UPdate your profile
               </Typography>
             </Box>
           </Stack>
@@ -94,11 +98,11 @@ const LoginPage = () => {
 
           <Box>
             <CPForm
-              onSubmit={handleLogin}
+              onSubmit={handleProfileUpdate}
               resolver={zodResolver(validationSchema)}
               defaultValues={{
-                email: "",
-                password: "",
+                email: user?.email,
+                name: user?.name,
               }}
             >
               <Grid container spacing={2} my={1}>
@@ -112,28 +116,14 @@ const LoginPage = () => {
                 </Grid>
                 <Grid item md={6}>
                   <CPInput
-                    name="password"
-                    label="Password"
-                    type="password"
+                    name="name"
+                    label="Name"
+                    type="text"
                     fullWidth={true}
                   />
                 </Grid>
               </Grid>
-
-              <Link href={"/forgot-password"}>
-                <Typography
-                  mb={1}
-                  textAlign="end"
-                  component="p"
-                  fontWeight={300}
-                  sx={{
-                    textDecoration: "underline",
-                  }}
-                >
-                  Forgot Password?
-                </Typography>
-              </Link>
-
+              <Toaster />
               <Button
                 sx={{
                   margin: "10px 0px",
@@ -141,26 +131,8 @@ const LoginPage = () => {
                 fullWidth={true}
                 type="submit"
               >
-                {isLoading ? "Loginin" : "Login"}
+                Update
               </Button>
-              <Typography component="p" fontWeight={300}>
-                Don&apos;t have an account?{" "}
-                <Link
-                  href="/register"
-                  className="hover:text-blue-500 hover:underline"
-                >
-                  Create an account
-                </Link>
-              </Typography>
-              <Typography component="p" fontWeight={300}>
-               Back to {" "}
-                <Link
-                  href="/"
-                  className="hover:text-blue-500 hover:underline"
-                >
-                 Home
-                </Link>
-              </Typography>
             </CPForm>
           </Box>
         </Box>
@@ -169,4 +141,4 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+export default EditProfile;

@@ -1,56 +1,96 @@
-"ues client";
+"use client";
 
-import { Button, Container, Grid, Typography } from "@mui/material";
+import { Button, Container, Grid, Typography, Box } from "@mui/material";
 import Image from "next/image";
 import React from "react";
 import dog from "@/assets/dogs/dog1.jpg";
 import Link from "next/link";
+import { styled } from "@mui/material/styles"; // Ensure you're importing from @mui/material/styles
+import { useGetSinglePetQuery } from "@/redux/api/petApi";
 
-const PetDetails = async ({ params }: any) => {
-  const res = await fetch(`http://localhost:3000/api/pets/${params?.id}`);
-  const { data: pet } = await res.json();
-  console.log(params, pet);
+const StyledContainer = styled(Container)(({ theme }) => ({
+  padding: theme.spacing(4),
+}));
 
+const StyledImage = styled(Image)({
+  width: "100%",
+  borderRadius: "8px",
+  objectFit: "cover",
+});
+
+const DetailItem = styled(Typography)(({ theme }) => ({
+  marginBottom: theme.spacing(1),
+}));
+
+const StyledButton = styled(Button)(({ theme }) => ({
+  marginTop: theme.spacing(2),
+  textTransform: "none",
+}));
+
+const PetDetails = ({ params }: any) => {
+  const { data, isLoading } = useGetSinglePetQuery(params?.id);
+  const pet = data?.data || {};
+  if (isLoading) {
+    return (
+      <Container>
+        <h1>Loading...</h1>
+      </Container>
+    );
+  }
   return (
-    <Container>
+    <StyledContainer>
       <Grid container spacing={3}>
         {/* Left side - Image */}
         <Grid item xs={12} md={4}>
-          <Image
-            src={dog}
+          <StyledImage
+            src={pet?.photo}
             alt={pet.name}
-            style={{ width: "100%", borderRadius: "8px" }}
+            layout="responsive"
+            width={400}
+            height={300}
           />
         </Grid>
         {/* Right side - Details */}
         <Grid item xs={12} md={8}>
-          <Typography variant="h2">{pet.name}</Typography>
-          <Typography variant="subtitle1">Species: {pet.species}</Typography>
-          <Typography variant="subtitle1">Breed: {pet.breed}</Typography>
-          <Typography variant="subtitle1">Age: {pet.age}</Typography>
-          <Typography variant="subtitle1">Size: {pet.size}</Typography>
-          <Typography variant="subtitle1">Location: {pet.location}</Typography>
-          <Typography variant="subtitle1">
-            Description: {pet.description}
+          <Typography variant="h2" gutterBottom>
+            {pet.name}
           </Typography>
-          <Typography variant="subtitle1">
-            Temperament: {pet.temperament}
-          </Typography>
-          <Typography variant="subtitle1">
-            Medical History: {pet.medicalHistory}
-          </Typography>
-          <Typography variant="subtitle1">
-            Adoption Requirements: {pet.adoptionRequirements}
-          </Typography>
+          <DetailItem variant="subtitle1">
+            <strong>Species:</strong> {pet.species}
+          </DetailItem>
+          <DetailItem variant="subtitle1">
+            <strong>Breed:</strong> {pet.breed}
+          </DetailItem>
+          <DetailItem variant="subtitle1">
+            <strong>Age:</strong> {pet.age}
+          </DetailItem>
+          <DetailItem variant="subtitle1">
+            <strong>Size:</strong> {pet.size}
+          </DetailItem>
+          <DetailItem variant="subtitle1">
+            <strong>Location:</strong> {pet.location}
+          </DetailItem>
+          <DetailItem variant="subtitle1">
+            <strong>Description:</strong> {pet.description}
+          </DetailItem>
+          <DetailItem variant="subtitle1">
+            <strong>Temperament:</strong> {pet.temperament}
+          </DetailItem>
+          <DetailItem variant="subtitle1">
+            <strong>Medical History:</strong> {pet.medicalHistory}
+          </DetailItem>
+          <DetailItem variant="subtitle1">
+            <strong>Adoption Requirements:</strong> {pet.adoptionRequirements}
+          </DetailItem>
 
           <Link href={`/adoption-request/${pet?.id}`} passHref>
-            <Button variant="contained" color="primary">
+            <StyledButton variant="contained" color="primary">
               Adoption Request
-            </Button>
+            </StyledButton>
           </Link>
         </Grid>
       </Grid>
-    </Container>
+    </StyledContainer>
   );
 };
 

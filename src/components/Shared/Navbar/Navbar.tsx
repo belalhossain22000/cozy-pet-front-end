@@ -13,21 +13,16 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useTheme, useMediaQuery } from "@mui/material";
+import { useGetMyProfileQuery } from "@/redux/api/authApi";
 
 const Navbar = () => {
   const router = useRouter();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-
-  const token: string | null = getFromLocalStorage("accessToken");
-  let userInfo;
-  if (token !== null) {
-    userInfo = decodedToken(token) as any;
-  } else {
-    userInfo = null;
-    console.error("No access token found");
-  }
+  const { data, isLoading } = useGetMyProfileQuery(undefined);
+  const userInfo = data?.data || {};
+  
 
   const handleLogOut = () => {
     removeUserFromLocalStorage();
@@ -75,7 +70,7 @@ const Navbar = () => {
                 <MenuItem component={Link} href="/" onClick={handleMenuClose}>Home</MenuItem>
                 <MenuItem component={Link} href="/about-us" onClick={handleMenuClose}>About Us</MenuItem>
                 {userInfo?.role === "ADMIN" && (
-                  <MenuItem component={Link} href="/dashboard" onClick={handleMenuClose}>Dashboard</MenuItem>
+                  <MenuItem component={Link} href="/dashboard/users" onClick={handleMenuClose}>Dashboard</MenuItem>
                 )}
                 {userInfo ? (
                   <ProfileMenu userInfo={userInfo} handleLogOut={handleLogOut} />
