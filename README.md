@@ -6,6 +6,13 @@ Welcome to the Cozy Pets frontend repository. This project is built using Next.j
 
 Check out the live application at: [Cozy Pets](https://cozy-pet-front-end.vercel.app)
 
+
+## Admin Credential
+
+email: admin@gmail.com
+
+password: 123456
+
 ## Table of Contents
 
 - [Features](#features)
