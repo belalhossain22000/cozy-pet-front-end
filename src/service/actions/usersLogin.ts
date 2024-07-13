@@ -5,7 +5,7 @@ import setAccessToken from './setAccessToken';
 
 export const usersLogin = async (data: FieldValues) => {
    const res = await fetch(
-      `http://localhost:3000/api/login`,
+      `https://cozypet-frontend.vercel.app/api/login`,
       {
          method: 'POST',
          headers: {
